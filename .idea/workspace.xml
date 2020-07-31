@@ -2,22 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e0f23d9-3c53-4726-ae51-2a5f112a9f82" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/LoggingService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/PdfCrawlerScanException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/crawl-jobs.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/crawl-jobs.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neue_bewerbungen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/neue_bewerbungen.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Logger.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/LoggingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LoggingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/PdfScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/PdfScanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Logger.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/PdfScanner$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PdfScanner$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/LoggingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LoggingService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/pdf-crawler.kotlin_module" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/PdfScanner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PdfScanner.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/pdf-crawler-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/pdf-crawler-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +35,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
@@ -82,7 +77,7 @@
       <workItem from="1596128023108" duration="2230000" />
       <workItem from="1596130819726" duration="5052000" />
       <workItem from="1596142252714" duration="3616000" />
-      <workItem from="1596196237090" duration="8549000" />
+      <workItem from="1596196237090" duration="11259000" />
     </task>
     <servers />
   </component>
@@ -111,26 +106,26 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="417" y="14" key="CommitChangelistDialog2/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596128747980" />
-    <state width="1398" height="349" key="GridCell.Tab.0.bottom" timestamp="1596205483699">
+    <state width="1398" height="475" key="GridCell.Tab.0.bottom" timestamp="1596214879997">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.bottom/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597822" />
-    <state width="1398" height="349" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1596205483699" />
-    <state width="1398" height="349" key="GridCell.Tab.0.center" timestamp="1596205483697">
+    <state width="1398" height="475" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1596214879997" />
+    <state width="1398" height="475" key="GridCell.Tab.0.center" timestamp="1596214879996">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.center/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597820" />
-    <state width="1398" height="349" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1596205483697" />
-    <state width="1398" height="349" key="GridCell.Tab.0.left" timestamp="1596205483696">
+    <state width="1398" height="475" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1596214879996" />
+    <state width="1398" height="475" key="GridCell.Tab.0.left" timestamp="1596214879996">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.left/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597819" />
-    <state width="1398" height="349" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1596205483696" />
-    <state width="1398" height="349" key="GridCell.Tab.0.right" timestamp="1596205483698">
+    <state width="1398" height="475" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1596214879996" />
+    <state width="1398" height="475" key="GridCell.Tab.0.right" timestamp="1596214879997">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.right/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597821" />
-    <state width="1398" height="349" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1596205483698" />
+    <state width="1398" height="475" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1596214879997" />
     <state x="523" y="375" key="ReplaceDuplicatesPrompt" timestamp="1596141163886">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -157,5 +152,16 @@
     </state>
     <state x="505" y="233" key="search.everywhere.popup/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596127530251" />
     <state x="433" y="200" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1596144993555" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/LoggingService.java</url>
+          <line>18</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

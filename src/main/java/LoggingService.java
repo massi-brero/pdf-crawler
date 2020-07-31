@@ -11,7 +11,11 @@ public class LoggingService {
         logger.log(Level.OFF, "Starting Logger for PDF Extraction Job");
     }
 
-    public static void addErrorToLog(Exception e) {
+    public static void addExceptionToLog(Exception e) {
         logger.log(Level.ERROR, e.getMessage());
+    }
+
+    public static void addErrorToLog(String msg) {
+        logger.log(Level.ERROR, msg);
     }
 }

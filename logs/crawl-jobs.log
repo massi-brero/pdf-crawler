@@ -1,2 +1,13 @@
-2020-07-31 16:24:48 OFF   LoggingService:10 - ________________________________________________
-2020-07-31 16:24:48 OFF   LoggingService:11 - Starting Logger for PDF Extraction Job
+
+2020-07-31 18:56:37 OFF   LoggingService:10 - ________________________________________________
+2020-07-31 18:56:37 OFF   LoggingService:11 - Starting Logger for PDF Extraction Job
+2020-07-31 18:57:19 ERROR LoggingService:15 - Error: Header doesn't contain versioninfo
+2020-07-31 18:58:37 OFF   LoggingService:10 - ________________________________________________
+2020-07-31 18:58:37 OFF   LoggingService:11 - Starting Logger for PDF Extraction Job
+2020-07-31 18:58:43 ERROR LoggingService:19 - Missing Data in file Microsoft Word - Julian_Bam.docx. Name: JulianBam - Date: 
+2020-07-31 18:58:45 ERROR LoggingService:19 - Missing Data in file Microsoft Word - Dokument1. Name:  - Date: 10.102019
+2020-07-31 18:58:45 ERROR LoggingService:15 - Error: Header doesn't contain versioninfo
+2020-07-31 19:06:24 OFF   LoggingService:10 - ________________________________________________
+2020-07-31 19:06:24 OFF   LoggingService:11 - Starting Logger for PDF Extraction Job
+2020-07-31 19:06:25 ERROR LoggingService:19 - Missing Data in file Julian_Bam.pdf. Name: JulianBam - Date: 
+2020-07-31 19:06:25 ERROR LoggingService:19 - Missing Data in file xxx.pdf. Name:  - Date: 10.102019

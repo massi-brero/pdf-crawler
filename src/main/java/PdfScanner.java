@@ -27,7 +27,7 @@ public class PdfScanner {
             stripper.setSortByPosition(true);
             tStripper = new PDFTextStripper();
         } catch (IOException e) {
-            LoggingService.addErrorToLog(e);
+            LoggingService.addExceptionToLog(e);
         }
 
         pdfData = new HashMap<>();
@@ -44,22 +44,22 @@ public class PdfScanner {
                     if (!Files.isDirectory(file)) {
                         System.out.println(file.toAbsolutePath());
                         try (PDDocument document = PDDocument.load(new File(file.toAbsolutePath().toString()))) {
-                            extractFromFile(document);
+                            extractFromFile(document, file);
                         } catch (IOException e) {
-                            LoggingService.addErrorToLog(e);
+                            LoggingService.addExceptionToLog(e);
                         }
                     }
                     return FileVisitResult.CONTINUE;
                 }
             });
         } catch (IOException e) {
-            LoggingService.addErrorToLog(e);
+            LoggingService.addExceptionToLog(e);
         }
 
         return pdfData;
     }
 
-    private void extractFromFile(PDDocument document) throws IOException {
+    private void extractFromFile(PDDocument document, Path file) throws IOException {
         if (!document.isEncrypted()) {
 
             String pdfFileInText = tStripper.getText(document);
@@ -75,6 +75,14 @@ public class PdfScanner {
                     date.set(extractLineData(line, DATE_KEY));
                 }
             });
+
+            if (name.toString().isEmpty() || date.toString().isEmpty()) {
+                var message = "Missing Data in file %s. Name: %s - Date: %s";
+                LoggingService.addErrorToLog(
+                        format(message, file.getFileName(), name.toString(), date.toString())
+                );
+            }
+
             pdfData.put(name.toString(), date.toString());
         }
     }
