@@ -1,4 +1,5 @@
 PdfScanner.class
+PdfScanner$1.class
+LoggingController.class
 Controller.class
 CsvWriter.class
-Logger.class

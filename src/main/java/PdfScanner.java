@@ -27,7 +27,7 @@ public class PdfScanner {
             stripper.setSortByPosition(true);
             tStripper = new PDFTextStripper();
         } catch (IOException e) {
-            e.printStackTrace();
+            LoggingService.addErrorToLog(e);
         }
 
         pdfData = new HashMap<>();
@@ -37,20 +37,25 @@ public class PdfScanner {
     public Map<String, String> scanFile(String path) throws IOException {
         path = "/Users/brero/code/pdf-crawler/documents/";
         final String filePath = path.concat("Alex_Alexens.pdf");
-        Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                if (!Files.isDirectory(file)) {
-                  System.out.println(file.toAbsolutePath());
-                    try (PDDocument document = PDDocument.load(new File(file.toAbsolutePath().toString()))) {
-                        extractFromFile(document);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        try {
+            Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    if (!Files.isDirectory(file)) {
+                        System.out.println(file.toAbsolutePath());
+                        try (PDDocument document = PDDocument.load(new File(file.toAbsolutePath().toString()))) {
+                            extractFromFile(document);
+                        } catch (IOException e) {
+                            LoggingService.addErrorToLog(e);
+                        }
                     }
+                    return FileVisitResult.CONTINUE;
                 }
-                return FileVisitResult.CONTINUE;
-            }
-        });
+            });
+        } catch (IOException e) {
+            LoggingService.addErrorToLog(e);
+        }
+
         return pdfData;
     }
 
