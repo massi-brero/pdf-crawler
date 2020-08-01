@@ -37,7 +37,6 @@ public class PdfScanner {
 
 
     public Map<String, String> scanFile(String path) throws IOException {
-        path = "/Users/brero/code/java/pdf-crawler/documents/";
         try {
             Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
                 @Override

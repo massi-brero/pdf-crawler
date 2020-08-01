@@ -5,18 +5,20 @@ import java.util.Scanner;
 
 
 public class Controller {
+    private final static ConfigService configService = new ConfigService();
+    private final static Scanner sn = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
 
-        final var pdfScanner = new PdfScanner();
         showSplash();
         var option = showMenu();
 
         LoggingService.startLogging();
-        //Check the user input
+        final var pdfScanner = new PdfScanner();
+
         switch (option) {
             case "1":
-                var pdfData = pdfScanner.scanFile("");
+                var pdfData = pdfScanner.scanFile(configService.getInputPath());
                 new CsvWriter().createCsv(pdfData);
                 break;
             case "2":
@@ -36,7 +38,6 @@ public class Controller {
         var option = "";
 
         while (option.isEmpty()) {
-            final Scanner sn = new Scanner(System.in);
             System.out.println("\n\n***** Menue *****");
             System.out.println("[1] Standardkonfiguration");
             System.out.println("[2] Neuen Pfad eingeben");
@@ -53,12 +54,6 @@ public class Controller {
     }
 
     private static void showSplash() {
-        System.out.println(" _____  _____  ______    _____                    _");
-        System.out.println("|  __ \\|  __ \\|  ____|  / ____|                  | |");
-        System.out.println("| |__) | |  | | |__    | |     _ __ __ ___      _| | ___ _ __");
-        System.out.println("|  ___/| |  | |  __|   | |    | '__/ _` \\ \\ /\\ / / |/ _ \\ '__|");
-        System.out.println("| |    | |__| | |      | |____| | | (_| |\\ V  V /| |  __/ |");
-        System.out.println("|_|    |_____/|_|       \\_____|_|  \\__,_| \\_/\\_/ |_|\\___|_|");
-        System.out.println("(c) Public Sued Boss");
+        System.out.println(configService.getSlashPic());
     }
 }
