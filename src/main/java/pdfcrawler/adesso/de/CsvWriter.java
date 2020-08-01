@@ -1,3 +1,5 @@
+package pdfcrawler.adesso.de;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
