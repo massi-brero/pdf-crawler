@@ -1,6 +1,7 @@
 package pdfcrawler.adesso.de;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -10,6 +11,7 @@ public class Controller {
 
     public static void main(String[] args) throws IOException {
 
+        Map<String, String> pdfData;
         showSplash();
         var option = showMenu();
 
@@ -18,15 +20,17 @@ public class Controller {
 
         switch (option) {
             case "1":
-                var pdfData = pdfScanner.scanFile(configService.getInputPath());
+                pdfData = pdfScanner.scanFile(configService.getInputPath());
                 new CsvWriter().createCsv(pdfData);
                 break;
             case "2":
-                System.out.println("[2] Neuen Pfad eingeben");
+                var customPath = getPathFromUserInput();
+                pdfData = pdfScanner.scanFile(customPath);
+                new CsvWriter().createCsv(pdfData);
                 break;
             case "3":
                 //exit from the program
-                System.out.println("Exiting...");
+                System.out.println("Raus hier...");
                 System.exit(0);
             default:
                 //inform user in case of invalid choice.
@@ -38,7 +42,7 @@ public class Controller {
         var option = "";
 
         while (option.isEmpty()) {
-            System.out.println("\n\n***** Menue *****");
+            System.out.println("\n\n******* Menue *******");
             System.out.println("[1] Standardkonfiguration");
             System.out.println("[2] Neuen Pfad eingeben");
 
@@ -49,8 +53,9 @@ public class Controller {
         return option;
     }
 
-    private void getPathAsUserInput() {
-
+    private static String getPathFromUserInput() {
+        System.out.print("Ordner zu den PDF-Dateien: ");
+        return sn.next();
     }
 
     private static void showSplash() {

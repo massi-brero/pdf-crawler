@@ -87,7 +87,7 @@ public class PdfScanner {
         }
     }
 
-    private String extractLineData(String line, String name_key) {
-        return line.replaceAll(format("%s|:| ", name_key), "");
+    private String extractLineData(String line, String str) {
+        return line.replaceAll(format("%s|:|", str.trim()), "");
     }
 }
