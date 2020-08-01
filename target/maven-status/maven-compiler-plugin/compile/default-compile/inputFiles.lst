@@ -1,4 +1,5 @@
-/Users/brero/code/pdf-crawler/src/main/java/PdfScanner.java
-/Users/brero/code/pdf-crawler/src/main/java/Controller.java
-/Users/brero/code/pdf-crawler/src/main/java/Logger.java
-/Users/brero/code/pdf-crawler/src/main/java/CsvWriter.java
+/Users/brero/code/java/pdf-crawler/pdf-crawler/src/main/java/Controller.java
+/Users/brero/code/java/pdf-crawler/pdf-crawler/src/main/java/PdfScanner.java
+/Users/brero/code/java/pdf-crawler/pdf-crawler/src/main/java/LoggingService.java
+/Users/brero/code/java/pdf-crawler/pdf-crawler/src/main/java/PdfCrawlerScanException.java
+/Users/brero/code/java/pdf-crawler/pdf-crawler/src/main/java/CsvWriter.java

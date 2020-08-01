@@ -39,7 +39,7 @@ public class Controller {
             System.out.println("[1] Standardkonfiguration");
             System.out.println("[2] Neuen Pfad eingeben");
 
-            System.out.print("\n\nOption:");
+            System.out.print("Option: ");
             option = sn.next();
         }
 

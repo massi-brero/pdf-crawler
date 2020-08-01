@@ -1,6 +1,8 @@
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import static org.apache.log4j.Level.ERROR;
+
 public class LoggingService {
 
     private static final Logger logger = Logger.getLogger(LoggingService.class);
@@ -12,10 +14,10 @@ public class LoggingService {
     }
 
     public static void addExceptionToLog(Exception e) {
-        logger.log(Level.ERROR, e.getMessage());
+        logger.log(ERROR, e.getClass() + ": " + e.getMessage());
     }
 
     public static void addErrorToLog(String msg) {
-        logger.log(Level.ERROR, msg);
+        logger.log(ERROR, msg);
     }
 }

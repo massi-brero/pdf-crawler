@@ -9,7 +9,7 @@ public class CsvWriter {
  final  String[] HEADERS = { "Name", "title"};
 
   public void createCsv(Map<String, String> data) throws IOException {
-    FileWriter out = new FileWriter("./neue_bewerbungen.csv");
+    FileWriter out = new FileWriter("../bewerbungen.csv");
     try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT
       .withHeader(HEADERS))) {
       data.forEach((name, date) -> {

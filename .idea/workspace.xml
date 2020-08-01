@@ -2,16 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e0f23d9-3c53-4726-ae51-2a5f112a9f82" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/PdfCrawlerScanException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/3/930d9b913afb3c10010af7509a6a2260cbbd2765" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/crawl-jobs.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/crawl-jobs.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/neue_bewerbungen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/neue_bewerbungen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/Alex_Alexens.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/Frieda_Lachkick.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/Joe_Miller.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/Julian_Bam.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/documents/xxx.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/crawl-jobs.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/neue_bewerbungen.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/CsvWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/CsvWriter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/LoggingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LoggingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/PdfScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/PdfScanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/LoggingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/LoggingService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/pdf-crawler.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/PdfScanner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/PdfScanner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/pdf-crawler-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/pdf-crawler-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,6 +89,7 @@
       <workItem from="1596130819726" duration="5052000" />
       <workItem from="1596142252714" duration="3616000" />
       <workItem from="1596196237090" duration="11259000" />
+      <workItem from="1596283751141" duration="2204000" />
     </task>
     <servers />
   </component>
@@ -102,30 +114,38 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1440.900@0.0.1440.900" timestamp="1596145405344" />
+    <state x="483" y="86" key="#xdebugger.evaluate" timestamp="1596285571841">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="483" y="86" key="#xdebugger.evaluate/0.23.1440.877@0.23.1440.877" timestamp="1596285571841" />
     <state x="417" y="14" key="CommitChangelistDialog2" timestamp="1596128747980">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="417" y="14" key="CommitChangelistDialog2/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596128747980" />
-    <state width="1398" height="475" key="GridCell.Tab.0.bottom" timestamp="1596214879997">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="218" key="GridCell.Tab.0.bottom" timestamp="1596286256347">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.bottom/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597822" />
     <state width="1398" height="475" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1596214879997" />
-    <state width="1398" height="475" key="GridCell.Tab.0.center" timestamp="1596214879996">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="218" key="GridCell.Tab.0.bottom/0.23.1440.877@0.23.1440.877" timestamp="1596286256347" />
+    <state width="1398" height="218" key="GridCell.Tab.0.center" timestamp="1596286256346">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.center/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597820" />
     <state width="1398" height="475" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1596214879996" />
-    <state width="1398" height="475" key="GridCell.Tab.0.left" timestamp="1596214879996">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="218" key="GridCell.Tab.0.center/0.23.1440.877@0.23.1440.877" timestamp="1596286256346" />
+    <state width="1398" height="218" key="GridCell.Tab.0.left" timestamp="1596286256346">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.left/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597819" />
     <state width="1398" height="475" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1596214879996" />
-    <state width="1398" height="475" key="GridCell.Tab.0.right" timestamp="1596214879997">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state width="1398" height="218" key="GridCell.Tab.0.left/0.23.1440.877@0.23.1440.877" timestamp="1596286256346" />
+    <state width="1398" height="218" key="GridCell.Tab.0.right" timestamp="1596286256347">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state width="1638" height="423" key="GridCell.Tab.0.right/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131597821" />
     <state width="1398" height="475" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1596214879997" />
+    <state width="1398" height="218" key="GridCell.Tab.0.right/0.23.1440.877@0.23.1440.877" timestamp="1596286256347" />
     <state x="523" y="375" key="ReplaceDuplicatesPrompt" timestamp="1596141163886">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
@@ -143,25 +163,19 @@
     </state>
     <state x="578" y="259" key="extract.method.dialog/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596131315248" />
     <state x="495" y="222" width="535" height="641" key="extract.method.dialog/0.0.1440.900@0.0.1440.900" timestamp="1596196869760" />
+    <state x="422" y="200" width="596" height="522" key="find.popup" timestamp="1596286076485">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="422" y="200" width="596" height="522" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1596286076485" />
     <state x="485" y="210" key="refactoring.ChangeSignatureDialog" timestamp="1596139936548">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="485" y="210" key="refactoring.ChangeSignatureDialog/0.0.1440.900@0.0.1440.900" timestamp="1596139936548" />
-    <state x="433" y="200" width="670" height="676" key="search.everywhere.popup" timestamp="1596144993555">
-      <screen x="0" y="0" width="1440" height="900" />
+    <state x="433" y="218" width="670" height="659" key="search.everywhere.popup" timestamp="1596286072450">
+      <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="505" y="233" key="search.everywhere.popup/-116.-1080.1920.1080/0.0.1680.1050@0.0.1680.1050" timestamp="1596127530251" />
     <state x="433" y="200" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1596144993555" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/LoggingService.java</url>
-          <line>18</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <state x="433" y="218" width="670" height="659" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1596286072450" />
   </component>
 </project>

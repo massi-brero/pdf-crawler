@@ -17,8 +17,8 @@ import static java.lang.String.format;
 public class PdfScanner {
 
     private final HashMap<String, String> pdfData;
-    private final String NAME_KEY = "Name";
-    private final String DATE_KEY = "Eingang";
+    private final static String NAME_KEY = "Name";
+    private final static String DATE_KEY = "Eingang";
     private PDFTextStripper tStripper = null;
 
     public PdfScanner() {
@@ -35,8 +35,7 @@ public class PdfScanner {
 
 
     public Map<String, String> scanFile(String path) throws IOException {
-        path = "/Users/brero/code/pdf-crawler/documents/";
-        final String filePath = path.concat("Alex_Alexens.pdf");
+        path = "/Users/brero/code/java/pdf-crawler/documents/";
         try {
             Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
                 @Override
