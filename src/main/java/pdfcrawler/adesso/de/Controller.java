@@ -1,56 +1,65 @@
 package pdfcrawler.adesso.de;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 
 public class Controller {
-    private final static ConfigService configService = new ConfigService();
-    private final static Scanner sn = new Scanner(System.in);
+    private static final ConfigService configService = new ConfigService();
+    private static final Scanner sn = new Scanner(System.in);
 
+    /**
+     *
+     * @param args not needed here
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
 
-        Map<String, String> pdfData;
+        var pdfData = new HashMap<String, String>();
+        final var pdfScanner = new PdfScanner();
         showSplash();
+
         var option = showMenu();
 
-        LoggingService.startLogging();
-        final var pdfScanner = new PdfScanner();
+        while (!option.equals("3")) {
+            LoggingService.startLogging();
 
-        switch (option) {
-            case "1":
-                pdfData = pdfScanner.scanFile(configService.getInputPath());
-                new CsvWriter().createCsv(pdfData);
-                break;
-            case "2":
-                var customPath = getPathFromUserInput();
-                pdfData = pdfScanner.scanFile(customPath);
-                new CsvWriter().createCsv(pdfData);
-                break;
-            case "3":
-                //exit from the program
-                System.out.println("Raus hier...");
-                System.exit(0);
-            default:
-                //inform user in case of invalid choice.
-                System.out.println("Ungueltige Eingabe. Read the options carefully...");
+            switch (option) {
+                case "1":
+                    pdfData = pdfScanner.scanFile(configService.getInputPath());
+                    new CsvWriter().createCsv(pdfData);
+                    break;
+                case "2":
+                    var customPath = getPathFromUserInput();
+                    pdfData = pdfScanner.scanFile(customPath);
+                    new CsvWriter().createCsv(pdfData);
+                    break;
+                default:
+                    //inform user in case of invalid choice.
+                    System.out.println("Ungueltige Eingabe.");
+            }
+            pdfData.clear();
+            option = showMenu();
         }
+
+        System.out.println("Bis bald.");
+        System.exit(0);
+
     }
 
     private static String showMenu() {
-        var option = "";
 
-        while (option.isEmpty()) {
-            System.out.println("\n\n******* Menue *******");
-            System.out.println("[1] Standardkonfiguration");
-            System.out.println("[2] Neuen Pfad eingeben");
+        System.out.println("\n\n******* Menue *******");
+        System.out.println("[1] Standardkonfiguration");
+        System.out.println("[2] Neuen Pfad eingeben");
+        System.out.println("[3] Beenden");
 
-            System.out.print("Option: ");
-            option = sn.next();
-        }
+        System.out.print("Option: ");
 
-        return option;
+        return sn.next();
+
     }
 
     private static String getPathFromUserInput() {

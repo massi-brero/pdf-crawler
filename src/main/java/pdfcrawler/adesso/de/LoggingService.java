@@ -5,7 +5,10 @@ import org.apache.log4j.Logger;
 
 import static org.apache.log4j.Level.ERROR;
 
-public class LoggingService {
+class LoggingService {
+
+    private LoggingService() {
+    }
 
     private static final Logger logger = Logger.getLogger(LoggingService.class);
     private static final String DIVIDER = "________________________________________________";

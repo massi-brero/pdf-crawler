@@ -19,10 +19,13 @@ import static java.lang.String.format;
 public class PdfScanner {
 
     private final HashMap<String, String> pdfData;
-    private final static String NAME_KEY = "Name";
-    private final static String DATE_KEY = "Eingang";
+    private static final String NAME_KEY = "Name";
+    private static final String DATE_KEY = "Eingang";
     private PDFTextStripper tStripper = null;
 
+    /**
+     * initializes the scanner
+     */
     public PdfScanner() {
         try {
             PDFTextStripperByArea stripper = new PDFTextStripperByArea();
@@ -36,13 +39,16 @@ public class PdfScanner {
     }
 
 
-    public Map<String, String> scanFile(String path) throws IOException {
+    /**
+     * @param path Path to PDF files
+     * @return extracted data
+     */
+    public HashMap<String, String> scanFile(String path) {
         try {
-            Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(Paths.get(path), new SimpleFileVisitor<>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                     if (!Files.isDirectory(file)) {
-                        System.out.println(file.toAbsolutePath());
                         try (PDDocument document = PDDocument.load(new File(file.toAbsolutePath().toString()))) {
                             extractFromFile(document, file);
                         } catch (IOException e) {
@@ -76,14 +82,15 @@ public class PdfScanner {
                 }
             });
 
-            if (name.toString().isEmpty() || date.toString().isEmpty()) {
+            if (name.toString().isBlank() || date.toString().isBlank()) {
                 var message = "Missing Data in file %s. Name: %s - Date: %s";
                 LoggingService.addErrorToLog(
-                        format(message, file.getFileName(), name.toString(), date.toString())
+                    format(message, file.getFileName(), name.toString(), date.toString())
                 );
+            } else {
+                pdfData.put(name.toString(), date.toString());
             }
 
-            pdfData.put(name.toString(), date.toString());
         }
     }
 

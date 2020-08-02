@@ -6,13 +6,12 @@ import java.util.Properties;
 
 public class ConfigService {
 
-    String result = "";
     InputStream inputStream;
     private String outputFilePath;
     private String inputPath;
     private String slashPic;
 
-    private final static String CONFIG_PATH = "config.properties";
+    private static final String CONFIG_PATH = "config.properties";
 
     public ConfigService() {
         init();
@@ -20,15 +19,14 @@ public class ConfigService {
 
     private void init() {
         Properties prop = new Properties();
-        String propFileName = CONFIG_PATH;
 
-        inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+        inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_PATH);
 
         try {
             prop.load(inputStream);
 
             setInputPath(prop.getProperty("inputPath"));
-            setOutputFilePath(prop.getProperty("outputFilePath"));
+            setOutputFilePath(prop.getProperty("outputFileName"));
             setSlashPic(prop.getProperty("slashPic"));
         } catch (IOException e) {
             LoggingService.addExceptionToLog(e);
