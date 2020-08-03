@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Map;
 
 public class CsvWriter {
-    final String[] headers = {"Name", "title"};
+    final String[] headers = {"Name", "Datum"};
     private final String SUFFIX = ".csv";
 
     public void createCsv(Map<String, String> data) throws IOException {
@@ -32,6 +32,7 @@ public class CsvWriter {
             });
         } finally {
             out.close();
+            LoggingService.log("Number of file scanned: " + data.size());
         }
     }
 }

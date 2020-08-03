@@ -4,6 +4,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import static org.apache.log4j.Level.ERROR;
+import static org.apache.log4j.Level.OFF;
 
 class LoggingService {
 
@@ -14,8 +15,8 @@ class LoggingService {
     private static final String DIVIDER = "________________________________________________";
 
     public static void startLogging() {
-        logger.log(Level.OFF, DIVIDER);
-        logger.log(Level.OFF, "Starting Logger for PDF Extraction Job");
+        logger.log(OFF, DIVIDER);
+        logger.log(OFF, "Starting Logger for PDF Extraction Job");
     }
 
     public static void addExceptionToLog(Exception e) {
@@ -24,5 +25,9 @@ class LoggingService {
 
     public static void addErrorToLog(String msg) {
         logger.log(ERROR, msg);
+    }
+
+    public static void log(String msg) {
+        logger.log(OFF, msg);
     }
 }

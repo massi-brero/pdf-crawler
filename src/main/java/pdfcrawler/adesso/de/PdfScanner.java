@@ -22,6 +22,7 @@ public class PdfScanner {
     private static final String NAME_KEY = "Name";
     private static final String DATE_KEY = "Eingang";
     private PDFTextStripper tStripper = null;
+    private static final String FILE_SUFFIX = ".pdf";
 
     /**
      * initializes the scanner
@@ -75,7 +76,7 @@ public class PdfScanner {
             AtomicReference<String> date = new AtomicReference<>("");
             lines.forEach(line -> {
                 if (line.startsWith(NAME_KEY)) {
-                    name.set(extractLineData(line, NAME_KEY));
+                    name.set(extractNameFromFileName(file));
                 }
                 if (line.startsWith(DATE_KEY)) {
                     date.set(extractLineData(line, DATE_KEY));
@@ -91,7 +92,24 @@ public class PdfScanner {
                 pdfData.put(name.toString(), date.toString());
             }
 
+        } else {
+            LoggingService.addErrorToLog(file.getFileName().toString().concat(" - File is encrypted"));
         }
+    }
+
+    private String extractNameFromFileName(Path file) {
+        String fileName = file.getFileName().toString().replace(FILE_SUFFIX, "");
+        String[] nameComponent = fileName.split("_");
+        String name = "";
+        try {
+            name =  nameComponent[nameComponent.length-2]
+                    .concat(" ")
+                    .concat(nameComponent[nameComponent.length-1]);
+        } catch (Exception e) {
+           LoggingService.addErrorToLog("File name does not support (.*)Firstname_Lastname.pdf syntax.");
+        }
+
+        return name;
     }
 
     private String extractLineData(String line, String str) {

@@ -2,7 +2,6 @@ package pdfcrawler.adesso.de;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 
@@ -10,11 +9,6 @@ public class Controller {
     private static final ConfigService configService = new ConfigService();
     private static final Scanner sn = new Scanner(System.in);
 
-    /**
-     *
-     * @param args not needed here
-     * @throws IOException
-     */
     public static void main(String[] args) throws IOException {
 
         var pdfData = new HashMap<String, String>();
@@ -51,9 +45,9 @@ public class Controller {
 
     private static String showMenu() {
 
-        System.out.println("\n\n******* Menue *******");
+        System.out.println("\n\n********** Menue **********");
         System.out.println("[1] Standardkonfiguration");
-        System.out.println("[2] Neuen Pfad eingeben");
+        System.out.println("[2] Pfad zu den PDF Dateien eingeben");
         System.out.println("[3] Beenden");
 
         System.out.print("Option: ");
