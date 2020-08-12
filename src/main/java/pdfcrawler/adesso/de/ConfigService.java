@@ -6,7 +6,6 @@ import java.util.Properties;
 
 public class ConfigService {
 
-    InputStream inputStream;
     private String outputFilePath;
     private String inputPath;
     private String slashPic;
@@ -20,22 +19,20 @@ public class ConfigService {
     private void init() {
         Properties prop = new Properties();
 
-        inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_PATH);
-
-        try {
+        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_PATH);) {
+            assert inputStream != null;
             prop.load(inputStream);
 
             setInputPath(prop.getProperty("inputPath"));
-            setOutputFilePath(prop.getProperty("outputFileName"));
+            String outputFileDirectory = prop.getProperty("outputFileDirectory");
+            setOutputFilePath(
+                    !outputFileDirectory.substring(
+                            outputFileDirectory.length() - 1).equals("-") ?
+                            outputFileDirectory.concat("/") :
+                            outputFileDirectory);
             setSlashPic(prop.getProperty("slashPic"));
         } catch (IOException e) {
             LoggingService.addExceptionToLog(e);
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                LoggingService.addExceptionToLog(e);
-            }
         }
     }
 

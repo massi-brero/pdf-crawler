@@ -75,14 +75,15 @@ public class PdfScanner {
             AtomicReference<String> name = new AtomicReference<>("");
             AtomicReference<String> date = new AtomicReference<>("");
             lines.forEach(line -> {
-                if (line.startsWith(NAME_KEY)) {
-                    name.set(extractNameFromFileName(file));
-                }
                 if (line.startsWith(DATE_KEY)) {
                     date.set(extractLineData(line, DATE_KEY));
                 }
             });
 
+            name.set(extractNameFromFileName(file));
+
+            // TODO: If only the name or the date is available, should we not display the error message
+            //  and then continue writing the available data to the CSV?
             if (name.toString().isBlank() || date.toString().isBlank()) {
                 var message = "Missing Data in file %s. Name: %s - Date: %s";
                 LoggingService.addErrorToLog(
@@ -102,6 +103,7 @@ public class PdfScanner {
         String[] nameComponent = fileName.split("_");
         String name = "";
         try {
+            // TODO: How to deal with names like "Hans von der Wiese"?
             name =  nameComponent[nameComponent.length-2]
                     .concat(" ")
                     .concat(nameComponent[nameComponent.length-1]);
