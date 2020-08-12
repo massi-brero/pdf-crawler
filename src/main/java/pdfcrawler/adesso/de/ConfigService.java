@@ -1,5 +1,6 @@
 package pdfcrawler.adesso.de;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -28,7 +29,7 @@ public class ConfigService {
             setOutputFilePath(
                     !outputFileDirectory.substring(
                             outputFileDirectory.length() - 1).equals("-") ?
-                            outputFileDirectory.concat("/") :
+                            outputFileDirectory.concat(File.separator) :
                             outputFileDirectory);
             setSlashPic(prop.getProperty("slashPic"));
         } catch (IOException e) {
