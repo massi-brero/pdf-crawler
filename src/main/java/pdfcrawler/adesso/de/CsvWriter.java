@@ -22,8 +22,6 @@ public class CsvWriter {
         var configService = new ConfigService();
         Format formatter = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
         String dateTime = formatter.format(new Date());
-//        String outputDirectory = System.getProperty("user.dir") + File.separator + configService.getOutputFilePath();
-//        createOutputDirectory(outputDirectory);
 
         String filePath = outputDirectory.getAbsolutePath();
         // Make sure it contains File.separator at the end of the path.
@@ -32,7 +30,7 @@ public class CsvWriter {
         filePath = filePath.concat(dateTime).concat(SUFFIX);
 
         try (FileWriter out = new FileWriter(filePath);
-             CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(headers))
+             CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withDelimiter(';').withHeader(headers))
         ) {
             System.out.println("Output file: " + new File(filePath).getAbsolutePath());
 

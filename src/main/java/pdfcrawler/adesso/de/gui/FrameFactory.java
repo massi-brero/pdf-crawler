@@ -26,11 +26,7 @@ public class FrameFactory {
     private static String BASE_DIR;
 
     static {
-        try {
-            BASE_DIR = FrameFactory.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-        } catch (URISyntaxException e) {
-            LoggingService.log("There is an error extracting the base directory path: " + e.getMessage());
-        }
+        BASE_DIR = System.getProperty("user.dir") + File.separator + ".pdf-crawl/";
     }
 
     private static JFrame frame;
@@ -74,10 +70,12 @@ public class FrameFactory {
 
         inputPathFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         inputPathFileChooser.setMultiSelectionEnabled(true);
-        setDefaults();
-
+        inputPathFileChooser.setPreferredSize(new Dimension(1000, 600));
+        outputPathFileChooser.setPreferredSize(new Dimension(1000, 600));
         outputPathFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         outputPathFileChooser.setMultiSelectionEnabled(false);
+        setDefaults();
+
 
         ButtonsActionListener buttonsActionListener = new ButtonsActionListener();
 
@@ -145,6 +143,8 @@ public class FrameFactory {
 
         frame.pack();
         frame.setResizable(false);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 
         return frame;
     }
@@ -308,7 +308,13 @@ public class FrameFactory {
                 }
 
                 try {
-                    new CsvWriter().createCsv(pdfData, new File(outputPathTextField.getText()));
+                    File outputFile = new File(outputPathTextField.getText());
+                    outputFile.mkdir();
+                    new CsvWriter().createCsv(pdfData, outputFile);
+                    editSettingsToFile(DEFAULT_INPUTPATH, inputPathTextArea.getText());
+                    editSettingsToFile(DEFAULT_OUTPUTPATH, outputPathTextField.getText());
+                    editSettingsToFile(INPUTPATH_CHECKBOX, inputPathCheckbox.isSelected() ? "true" : "false");
+                    editSettingsToFile(OUTPUTPATH_CHECKBOX, outputPathCheckbox.isSelected() ? "true" : "false");
                 } catch (IOException e) {
                     // TODO: Display a GUI error messgae.
                     LoggingService.log("Error creating CSV:");
