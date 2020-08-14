@@ -21,6 +21,8 @@ public class FrameFactory {
     private static String SETTINGS_PROPERTIES = "settings.properties";
     private static String DEFAULT_INPUTPATH = "default.inputPath";
     private static String DEFAULT_OUTPUTPATH = "default.outputPath";
+    private static String INPUTPATH_CHECKBOX = "inputpath.checkbox";
+    private static String OUTPUTPATH_CHECKBOX = "outputpath.checkbox";
     private static String BASE_DIR;
 
     static {
@@ -54,6 +56,9 @@ public class FrameFactory {
     private static JButton browseOutputButton = new JButton("Browse");
     private static JButton convertButton = new JButton("Convert");
 
+    private static JCheckBox inputPathCheckbox = new JCheckBox("Save inputpath");
+    private static JCheckBox outputPathCheckbox = new JCheckBox("Save outputpath");
+
     public static JFrame initializeFrame() {
         if (frame == null) {
             frame = new JFrame("PDF Crawler");
@@ -67,26 +72,29 @@ public class FrameFactory {
 
         GridBagConstraints c = new GridBagConstraints();
 
-        // TODO: Set default path.
         inputPathFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         inputPathFileChooser.setMultiSelectionEnabled(true);
-        Properties prop = getDefaultPaths();
-        inputPathTextArea.setText(prop.getProperty(DEFAULT_INPUTPATH).replace(",", ls));
-//        inputPathFileChooser.setDragEnabled(true);
+        setDefaults();
+
         outputPathFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         outputPathFileChooser.setMultiSelectionEnabled(false);
-        outputPathTextField.setText(prop.getProperty(DEFAULT_OUTPUTPATH));
 
-        ButtonActionListener buttonActionListener = new ButtonActionListener();
+        ButtonsActionListener buttonsActionListener = new ButtonsActionListener();
 
-        browseInputButton.addActionListener(buttonActionListener);
-        browseOutputButton.addActionListener(buttonActionListener);
-        convertButton.addActionListener(buttonActionListener);
+        browseInputButton.addActionListener(buttonsActionListener);
+        browseOutputButton.addActionListener(buttonsActionListener);
+        convertButton.addActionListener(buttonsActionListener);
+        inputPathCheckbox.addActionListener(buttonsActionListener);
+        outputPathCheckbox.addActionListener(buttonsActionListener);
 
         inputPathTextAreaScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         // Edit Element display properties
         inputPathTextAreaScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+
+        Panel defaultCheckboxPanel = new Panel();
+        defaultCheckboxPanel.add(inputPathCheckbox);
+        defaultCheckboxPanel.add(outputPathCheckbox);
 
         // Add input path label
         c.insets = new Insets(10, 10, 10, 10);
@@ -122,23 +130,60 @@ public class FrameFactory {
         c.gridy = 1;
         pane.add(browseOutputButton, c);
 
+        // Add defaults checkbox panel.
+        c.fill = GridBagConstraints.VERTICAL;
+        c.gridx = 0;
+        c.gridy = 3;
+        pane.add(defaultCheckboxPanel, c);
+
         // Add convert button
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 3;
         c.gridwidth = 3;
         pane.add(convertButton, c);
 
         frame.pack();
+        frame.setResizable(false);
 
         return frame;
     }
 
+    private static void setDefaults() {
+        Properties prop = getDefaultSettings();
+
+        if (prop != null) {
+            String inputpath = prop.getProperty(DEFAULT_INPUTPATH);
+            if (inputpath != null) {
+                inputPathTextArea.setText(inputpath.replace(",", ls));
+            }
+            String outputpath = prop.getProperty(DEFAULT_OUTPUTPATH);
+            if (outputpath != null) {
+                outputPathTextField.setText(outputpath);
+            }
+
+            String inputPathCheckboxProp = prop.getProperty(INPUTPATH_CHECKBOX);
+            String outputPathCheckboxProp = prop.getProperty(OUTPUTPATH_CHECKBOX);
+
+            if (inputPathCheckboxProp != null) {
+                inputPathCheckbox.setSelected(inputPathCheckboxProp.equals("true"));
+            }
+            if (outputPathCheckboxProp != null) {
+                outputPathCheckbox.setSelected(outputPathCheckboxProp.equals("true"));
+            }
+        }
+    }
+
     /**
      * Save the default input and output paths to the settings file.
-     * @param defaultInputPath
-     * @param defaultOutputPath
+     * @param key
+     * @param value
      */
-    private static void saveSettingsToFile(String defaultInputPath, String defaultOutputPath) {
+    private static void editSettingsToFile(String key, String value) {
+        if (key == null) {
+            return;
+        }
+
         try {
             String settingsFilePath = BASE_DIR + SETTINGS_PROPERTIES;
             File settingsFile = new File(settingsFilePath);
@@ -154,11 +199,11 @@ public class FrameFactory {
                 prop.load(inputStream);
 
                 output = new FileOutputStream(settingsFile);
-                if (defaultInputPath != null) {
-                    prop.setProperty(DEFAULT_INPUTPATH, defaultInputPath);
-                }
-                if (defaultOutputPath != null) {
-                    prop.setProperty(DEFAULT_OUTPUTPATH, defaultOutputPath);
+
+                if (value != null) {
+                    prop.setProperty(key, value);
+                } else {
+                    prop.remove(key);
                 }
 
                 prop.store(output, null);
@@ -173,7 +218,20 @@ public class FrameFactory {
         }
     }
 
-    private static Properties getDefaultPaths() {
+    /**
+     * Prepares the inputpath string for storing in properties.
+     * Replaces new lines with commas.
+     * @return
+     */
+    private static String prepareInputPathForSavedAsProperty() {
+        String contentString = inputPathTextArea.getText().replace(ls, ",");
+        if (contentString.substring(contentString.length() - 1).equals(",")) {
+            contentString = contentString.substring(0, contentString.length() -1);
+        }
+        return contentString;
+    }
+
+    private static Properties getDefaultSettings() {
         String settingsFilePath = BASE_DIR + SETTINGS_PROPERTIES;
 
         try(InputStream inputStream = new FileInputStream(settingsFilePath)) {
@@ -184,14 +242,14 @@ public class FrameFactory {
                 return properties;
             } else {
                 LoggingService.log("There is an error reading setting to file. InputStream is null.");
-                return new Properties();
+                return null;
             }
         } catch (IOException e) {
             LoggingService.log("There is an error reading setting to file: " + e.getMessage());
-            return new Properties();
+            return null;
         }
     }
-    static class ButtonActionListener implements ActionListener {
+    static class ButtonsActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == browseInputButton) {
@@ -213,11 +271,9 @@ public class FrameFactory {
                         }
                     });
 
-                    String contentString = inputPathTextArea.getText().replace(ls, ",");
-                    if (contentString.substring(contentString.length() - 1).equals(",")) {
-                        contentString = contentString.substring(0, contentString.length() -1);
+                    if (inputPathCheckbox.isSelected()) {
+                        editSettingsToFile(DEFAULT_INPUTPATH, inputPathTextArea.getText());
                     }
-                    saveSettingsToFile(contentString, null);
                 } else {
                     LoggingService.log("Open command cancelled by user.");
                 }
@@ -227,7 +283,9 @@ public class FrameFactory {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File outputPath = outputPathFileChooser.getSelectedFile();
                     outputPathTextField.setText(outputPath.getAbsolutePath());
-                    saveSettingsToFile(null, outputPathTextField.getText());
+                    if (outputPathCheckbox.isSelected()) {
+                        editSettingsToFile(DEFAULT_OUTPUTPATH, outputPathTextField.getText());
+                    }
                     LoggingService.log("Output directory: " + outputPath.getName());
                 } else {
                     LoggingService.log("Error occurred during choosing output directory.");
@@ -255,6 +313,22 @@ public class FrameFactory {
                     // TODO: Display a GUI error messgae.
                     LoggingService.log("Error creating CSV:");
                     LoggingService.log(e.getMessage());
+                }
+            } else if (actionEvent.getSource() == inputPathCheckbox) {
+                if (inputPathCheckbox.isSelected()) {
+                    editSettingsToFile(DEFAULT_INPUTPATH, inputPathTextArea.getText());
+                    editSettingsToFile(INPUTPATH_CHECKBOX, "true");
+                } else {
+                    editSettingsToFile(DEFAULT_INPUTPATH, null);
+                    editSettingsToFile(INPUTPATH_CHECKBOX, "false");
+                }
+            } else if (actionEvent.getSource() == outputPathCheckbox) {
+                if (outputPathCheckbox.isSelected()) {
+                    editSettingsToFile(DEFAULT_OUTPUTPATH, outputPathTextField.getText());
+                    editSettingsToFile(OUTPUTPATH_CHECKBOX, "true");
+                } else {
+                    editSettingsToFile(DEFAULT_OUTPUTPATH, null);
+                    editSettingsToFile(OUTPUTPATH_CHECKBOX, "false");
                 }
             }
         }

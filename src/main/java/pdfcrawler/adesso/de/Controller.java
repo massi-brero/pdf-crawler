@@ -18,33 +18,6 @@ public class Controller {
         JFrame jFrame = FrameFactory.initializeFrame();
         jFrame.setVisible(true);
 
-        /*var pdfData = new HashMap<String, String>();
-        final var pdfScanner = new PdfScanner();
-        showSplash();
-
-        var option = showMenu();
-
-        while (!option.equals("3")) {
-            LoggingService.startLogging();
-
-            switch (option) {
-                case "1":
-                    pdfData = pdfScanner.scanFile(configService.getInputPath());
-                    new CsvWriter().createCsv(pdfData, new File("/scans/bewerbungen/"));
-                    break;
-                case "2":
-                    var customPath = getPathFromUserInput();
-                    pdfData = pdfScanner.scanFile(customPath);
-                    new CsvWriter().createCsv(pdfData, new File("/scans/bewerbungen/"));
-                    break;
-                default:
-                    //inform user in case of invalid choice.
-                    System.out.println("Ungueltige Eingabe.");
-            }
-            pdfData.clear();
-            option = showMenu();
-        }*/
-
     }
 
     private static String showMenu() {
