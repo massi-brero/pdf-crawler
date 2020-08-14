@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import static org.apache.log4j.Level.ERROR;
 import static org.apache.log4j.Level.OFF;
 
-class LoggingService {
+public class LoggingService {
 
     private LoggingService() {
     }

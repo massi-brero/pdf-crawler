@@ -18,14 +18,18 @@ public class CsvWriter {
     final String[] headers = {"Name", "Datum"};
     private final String SUFFIX = ".csv";
 
-    public void createCsv(Map<String, String> data) throws IOException {
+    public void createCsv(Map<String, String> data, File outputDirectory) throws IOException {
         var configService = new ConfigService();
         Format formatter = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
         String dateTime = formatter.format(new Date());
-        String outputDirectory = System.getProperty("user.dir") + File.separator + configService.getOutputFilePath();
-        createOutputDirectory(outputDirectory);
+//        String outputDirectory = System.getProperty("user.dir") + File.separator + configService.getOutputFilePath();
+//        createOutputDirectory(outputDirectory);
 
-        var filePath = outputDirectory.concat(dateTime).concat(SUFFIX);
+        String filePath = outputDirectory.getAbsolutePath();
+        // Make sure it contains File.separator at the end of the path.
+        filePath = !filePath.substring(filePath.length() -1).equals(File.separator) ?  filePath + File.separator : filePath;
+        // Add date and suffix as file name.
+        filePath = filePath.concat(dateTime).concat(SUFFIX);
 
         try (FileWriter out = new FileWriter(filePath);
              CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(headers))

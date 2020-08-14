@@ -1,5 +1,9 @@
 package pdfcrawler.adesso.de;
 
+import pdfcrawler.adesso.de.gui.FrameFactory;
+
+import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -11,7 +15,10 @@ public class Controller {
 
     public static void main(String[] args) throws IOException {
 
-        var pdfData = new HashMap<String, String>();
+        JFrame jFrame = FrameFactory.initializeFrame();
+        jFrame.setVisible(true);
+
+        /*var pdfData = new HashMap<String, String>();
         final var pdfScanner = new PdfScanner();
         showSplash();
 
@@ -23,12 +30,12 @@ public class Controller {
             switch (option) {
                 case "1":
                     pdfData = pdfScanner.scanFile(configService.getInputPath());
-                    new CsvWriter().createCsv(pdfData);
+                    new CsvWriter().createCsv(pdfData, new File("/scans/bewerbungen/"));
                     break;
                 case "2":
                     var customPath = getPathFromUserInput();
                     pdfData = pdfScanner.scanFile(customPath);
-                    new CsvWriter().createCsv(pdfData);
+                    new CsvWriter().createCsv(pdfData, new File("/scans/bewerbungen/"));
                     break;
                 default:
                     //inform user in case of invalid choice.
@@ -36,10 +43,7 @@ public class Controller {
             }
             pdfData.clear();
             option = showMenu();
-        }
-
-        System.out.println("Bis bald.");
-        System.exit(0);
+        }*/
 
     }
 
