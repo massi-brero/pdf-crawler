@@ -321,7 +321,7 @@ public class FrameFactory {
                     editSettingsToFile(INPUTPATH_CHECKBOX, inputPathCheckbox.isSelected() ? "true" : "false");
                     editSettingsToFile(OUTPUTPATH_CHECKBOX, outputPathCheckbox.isSelected() ? "true" : "false");
                 } catch (IOException e) {
-                    // TODO: Display a GUI error messgae.
+                    // TODO: Display a GUI error message.
                     LoggingService.log("Error creating CSV:");
                     LoggingService.log(e.getMessage());
                 }

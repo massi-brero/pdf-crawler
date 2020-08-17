@@ -13,7 +13,8 @@
     </properties>
 
     <build>
-        <finalName>${packageName}</finalName>
+<!--        <finalName>${packageName}</finalName>-->
+        <finalName>pdf-crawler_</finalName>
 
         <plugins>
             <plugin>

@@ -19,7 +19,7 @@ public class CsvWriter {
     private final String SUFFIX = ".csv";
 
     public void createCsv(Map<String, String> data, File outputDirectory) throws IOException {
-        var configService = new ConfigService();
+        ConfigService configService = new ConfigService();
         Format formatter = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
         String dateTime = formatter.format(new Date());
 

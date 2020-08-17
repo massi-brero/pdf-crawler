@@ -20,7 +20,7 @@ public class PdfScanner {
 
     private final HashMap<String, String> pdfData;
     private static final String NAME_KEY = "Name";
-    private static final String DATE_KEY = "Eingang";
+    private static final String DATE_KEY = "Eingang:";
     private PDFTextStripper tStripper = null;
     private static final String FILE_SUFFIX = ".pdf";
 
@@ -115,6 +115,7 @@ public class PdfScanner {
     }
 
     private String extractLineData(String line, String str) {
-        return line.replaceAll(format("%s|:|", str.trim()), "");
+        String result = line.replaceAll(format("%s", str.trim()), "").trim();
+        return result.replaceAll(" [0-9]?[0-9]:[0-9]?[0-9] Uhr \\(Druck:.*", "");
     }
 }
