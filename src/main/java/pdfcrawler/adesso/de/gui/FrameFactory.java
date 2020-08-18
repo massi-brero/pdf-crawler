@@ -1,22 +1,21 @@
 package pdfcrawler.adesso.de.gui;
 
-import pdfcrawler.adesso.de.CsvWriter;
-import pdfcrawler.adesso.de.LoggingService;
+import pdfcrawler.adesso.de.csv.CSVErrorStatus;
+import pdfcrawler.adesso.de.csv.CsvWriter;
 import pdfcrawler.adesso.de.PdfScanner;
+import pdfcrawler.adesso.de.logging.ApplicationLogger;
+import pdfcrawler.adesso.de.logging.LoggingService;
+import pdfcrawler.adesso.de.utilities.Config;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class FrameFactory {
     private static String SETTINGS_PROPERTIES = "settings.properties";
@@ -32,8 +31,6 @@ public class FrameFactory {
 
     private static JFrame frame;
     private static Container pane;
-
-    private static String ls = System.getProperty("line.separator");
 
     private static final PdfScanner pdfScanner = new PdfScanner();
 
@@ -160,7 +157,7 @@ public class FrameFactory {
         if (prop != null) {
             String inputpath = prop.getProperty(DEFAULT_INPUTPATH);
             if (inputpath != null) {
-                inputPathTextArea.setText(inputpath.replace(",", ls));
+                inputPathTextArea.setText(inputpath.replace(",", Config.ls));
             }
             String outputpath = prop.getProperty(DEFAULT_OUTPUTPATH);
             if (outputpath != null) {
@@ -219,21 +216,8 @@ public class FrameFactory {
             }
 
         } catch (IOException e) {
-            LoggingService.log("There is an error saving setting to file: " + e.getMessage());
+            LoggingService.log("Es ist ein Fehler beim Anlegen der Setting." + e.getMessage());
         }
-    }
-
-    /**
-     * Prepares the inputpath string for storing in properties.
-     * Replaces new lines with commas.
-     * @return
-     */
-    private static String prepareInputPathForSavedAsProperty() {
-        String contentString = inputPathTextArea.getText().replace(ls, ",");
-        if (contentString.substring(contentString.length() - 1).equals(",")) {
-            contentString = contentString.substring(0, contentString.length() -1);
-        }
-        return contentString;
     }
 
     private static Properties getDefaultSettings() {
@@ -246,16 +230,18 @@ public class FrameFactory {
                 properties.load(inputStream);
                 return properties;
             } else {
-                LoggingService.log("There is an error reading setting to file. InputStream is null.");
+                LoggingService.log("Es ist ein Fehler beim Settings-Einlesen passiert. InnputStream ist null.");
                 return null;
             }
         } catch (IOException e) {
-            LoggingService.log("There is an error reading setting to file: " + e.getMessage());
+            LoggingService.log("Es ist ein Fehler beim Settings-Einlesen passiert: " + e.getMessage());
             return null;
         }
     }
+
     static class ButtonsActionListener implements ActionListener {
         @Override
+        // Browse input file
         public void actionPerformed(ActionEvent actionEvent) {
             if (actionEvent.getSource() == browseInputButton) {
                 int returnVal = inputPathFileChooser.showOpenDialog(pane);
@@ -269,44 +255,51 @@ public class FrameFactory {
                         if (Files.isDirectory(Paths.get(path.getAbsolutePath()))) {
                             File[] files = path.listFiles();
                             if (files != null && files.length > 0) {
-                                Arrays.stream(files).forEach(filepath -> inputPathTextArea.append(filepath.getAbsolutePath() + ls));
+                                Arrays.stream(files).forEach(filepath -> inputPathTextArea.append(filepath.getAbsolutePath() + Config.ls));
                             }
                         } else {
-                            inputPathTextArea.append(path.getAbsolutePath() + ls);
+                            inputPathTextArea.append(path.getAbsolutePath() + Config.ls);
                         }
                     });
 
                     if (inputPathCheckbox.isSelected()) {
                         editSettingsToFile(DEFAULT_INPUTPATH, inputPathTextArea.getText());
                     }
-                } else {
-                    LoggingService.log("Open command cancelled by user.");
                 }
+                // Browse output file
             } else if (actionEvent.getSource() == browseOutputButton) {
                 int returnVal = outputPathFileChooser.showOpenDialog(pane);
 
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File outputPath = outputPathFileChooser.getSelectedFile();
+                    ApplicationLogger.setOutputFile(outputPath.getAbsolutePath());
+
                     outputPathTextField.setText(outputPath.getAbsolutePath());
                     if (outputPathCheckbox.isSelected()) {
                         editSettingsToFile(DEFAULT_OUTPUTPATH, outputPathTextField.getText());
                     }
-                    LoggingService.log("Output directory: " + outputPath.getName());
                 } else {
-                    LoggingService.log("Error occurred during choosing output directory.");
+                    LoggingService.log("Fehler beim Auswählen des Ausgabepfad.");
                 }
+                // Press convert button
             } else if (actionEvent.getSource() == convertButton) {
                 if (inputPathTextArea.getText().isBlank()) {
-                    LoggingService.log("Start conversion without specifying an input path.");
+                    LoggingService.log("Konvertierung kann nicht stattfinden. Eingabedateipfad ist nicht definiert.");
                     return;
                 } else if (outputPathTextField.getText().isBlank()) {
-                    LoggingService.log("Start conversion without specifying an output path.");
+                    LoggingService.log("Konvertierung kann nicht stattfinden. Ausgabepfad ist nicht definiert");
                     return;
                 }
 
-                String[] inputPathLines = inputPathTextArea.getText().split(ls);
+                String[] inputPathLines = inputPathTextArea.getText().split(Config.ls);
 
                 Map<String, String> pdfData = new HashMap<>();
+
+                // Log all selected paths.
+                LoggingService.logApplicationLogs("Diese Pfade wurden zum Bearbeiten ausgewählt: ");
+                Arrays.stream(inputPathLines).forEach(inputPath -> {
+                    ApplicationLogger.noFormattingLog(String.format("\t%s\n", inputPath));
+                });
 
                 for (String inputPath : inputPathLines) {
                     pdfData.putAll(pdfScanner.scanFile(inputPath));
@@ -322,8 +315,11 @@ public class FrameFactory {
                     editSettingsToFile(OUTPUTPATH_CHECKBOX, outputPathCheckbox.isSelected() ? "true" : "false");
                 } catch (IOException e) {
                     // TODO: Display a GUI error message.
-                    LoggingService.log("Error creating CSV:");
+                    LoggingService.log("Fehler beim Erstellen von CSV:");
                     LoggingService.log(e.getMessage());
+                }
+                finally {
+                    logStatistics();
                 }
             } else if (actionEvent.getSource() == inputPathCheckbox) {
                 if (inputPathCheckbox.isSelected()) {
@@ -342,6 +338,35 @@ public class FrameFactory {
                     editSettingsToFile(OUTPUTPATH_CHECKBOX, "false");
                 }
             }
+        }
+
+        private void logStatistics() {
+            logProcesedFiles("Diese Dateien wurden gefunden:", CSVErrorStatus.selectedDocuments);
+            logProcesedFiles("Diese Dateien wurden ignoriert:", CSVErrorStatus.notReadDocuments);
+            logProcesedFiles("Diese Dateien wurden gelesen:", CSVErrorStatus.readDocuments);
+            logProcesedFiles("Diese Dateien wurden fehlerfrei verarbeitet:", CSVErrorStatus.documentWithoutErrors);
+            logProcesedFiles("Diese Dateien wurden mit Fehler verarbeitet:", CSVErrorStatus.documentWithErrors);
+            logCounters();
+        }
+
+        private void logProcesedFiles(String message, Set<String> documents) {
+            ApplicationLogger.log(message);
+            documents.forEach(documentPath -> {
+                ApplicationLogger.noFormattingLog(String.format("\t%s\n", documentPath));
+            });
+        }
+
+        private void logCounters() {
+            LoggingService.log(String.format(
+                    "\n\tEingegeben\tEingelesen\tNicht eingelesen\tOhne Fehler\tMit Fehlern\n" +
+                            "\t%d\t\t\t%d\t\t\t%d\t\t\t\t\t%d\t\t\t%d",
+                    CSVErrorStatus.selectedDocuments.size(),
+                    CSVErrorStatus.readDocuments.size(),
+                    CSVErrorStatus.notReadDocuments.size(),
+                    CSVErrorStatus.documentWithoutErrors.size(),
+                    CSVErrorStatus.documentWithErrors.size()
+                    ), true
+            );
         }
     }
 }
