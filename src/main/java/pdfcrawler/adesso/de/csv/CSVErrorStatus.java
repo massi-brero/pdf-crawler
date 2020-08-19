@@ -7,20 +7,24 @@ public class CSVErrorStatus {
     public static Set<String> selectedDocuments = new HashSet<>();
     public static Set<String> readDocuments = new HashSet<>();
     public static Set<String> notReadDocuments = new HashSet<>();
-    public static Set<String> documentWithErrors = new HashSet<>();
-    public static Set<String> documentWithoutErrors = new HashSet<>();
-    public static int successCount = 0;
-    public static int errorCount = 0;
+    public static Set<String> documentsWithErrors = new HashSet<>();
+    public static Set<String> documentsWithoutErrors = new HashSet<>();
 
     public static void addReadSuccess(String documentName) {
         readDocuments.add(documentName);
-        documentWithoutErrors.add(documentName);
-        successCount++;
+        documentsWithoutErrors.add(documentName);
     }
 
     public static void addReadError(String documentName) {
         readDocuments.add(documentName);
-        documentWithErrors.add(documentName);
-        errorCount++;
+        documentsWithErrors.add(documentName);
+    }
+
+    public static void resetCounters() {
+        selectedDocuments = new HashSet<>();
+        readDocuments = new HashSet<>();
+        notReadDocuments = new HashSet<>();
+        documentsWithErrors = new HashSet<>();
+        documentsWithoutErrors = new HashSet<>();
     }
 }

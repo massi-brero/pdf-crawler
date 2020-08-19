@@ -67,7 +67,6 @@ public class PdfScanner {
                                 readData.keySet().stream().findFirst().orElse("N/A"),
                                 readData.values().stream().findFirst().orElse("N/A")
                         );
-                        LoggingService.log(message);
                         ApplicationLogger.noFormattingLog(message);
 
                     } catch (IOException e) {

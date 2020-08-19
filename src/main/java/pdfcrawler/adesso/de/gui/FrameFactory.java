@@ -8,6 +8,7 @@ import pdfcrawler.adesso.de.logging.LoggingService;
 import pdfcrawler.adesso.de.utilities.Config;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,10 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class FrameFactory {
     private static String SETTINGS_PROPERTIES = "settings.properties";
@@ -34,8 +39,8 @@ public class FrameFactory {
 
     private static final PdfScanner pdfScanner = new PdfScanner();
 
-    private static JLabel fileInputPathLabel = new JLabel("Select input directory or file:");
-    private static JLabel fileOutputPathLabel = new JLabel("Select output directory:");
+    private static JLabel fileInputPathLabel = new JLabel("Eingabe Verzeichnis(e) / Detei(en) auswählen:");
+    private static JLabel fileOutputPathLabel = new JLabel("Ausgabe Verzeichnis auswählen:");
 
     private static JFileChooser inputPathFileChooser = new JFileChooser();
     private static JFileChooser outputPathFileChooser = new JFileChooser();
@@ -44,25 +49,26 @@ public class FrameFactory {
     private static JTextArea inputPathTextArea = new JTextArea(5, TEXTFIELD_WIDTH);
     private static JTextField outputPathTextField = new JTextField(TEXTFIELD_WIDTH);
 
+    private static JTextArea logsArea = new JTextArea(10, 50);
+    private static JScrollPane logsAreaScroll = new JScrollPane(logsArea);
+
     private static JScrollPane inputPathTextAreaScrollPane = new JScrollPane(inputPathTextArea);
 
-    private static JButton browseInputButton = new JButton("Browse");
-    private static JButton browseOutputButton = new JButton("Browse");
-    private static JButton convertButton = new JButton("Convert");
+    private static JButton browseInputButton = new JButton("Auswählen");
+    private static JButton browseOutputButton = new JButton("Auswählen");
+    private static JButton convertButton = new JButton("Ausführen");
 
-    private static JCheckBox inputPathCheckbox = new JCheckBox("Save inputpath");
-    private static JCheckBox outputPathCheckbox = new JCheckBox("Save outputpath");
+    private static JCheckBox inputPathCheckbox = new JCheckBox("Speichere Eingabepfad");
+    private static JCheckBox outputPathCheckbox = new JCheckBox("Speichere Ausgabepfad");
 
     public static JFrame initializeFrame() {
         if (frame == null) {
             frame = new JFrame("PDF Crawler");
         }
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-
         pane = frame.getContentPane();
-        pane.setLayout(new GridBagLayout());
+        GridBagLayout mgr = new GridBagLayout();
+        pane.setLayout(mgr);
 
         GridBagConstraints c = new GridBagConstraints();
 
@@ -74,6 +80,11 @@ public class FrameFactory {
         outputPathFileChooser.setMultiSelectionEnabled(false);
         setDefaults();
 
+        logsAreaScroll.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
+        logsArea.setAutoscrolls(true);
+        logsArea.setEditable(false);
+        logsAreaScroll.setPreferredSize(new Dimension(600, 250));
+        ( (DefaultCaret) logsArea.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         ButtonsActionListener buttonsActionListener = new ButtonsActionListener();
 
@@ -139,6 +150,12 @@ public class FrameFactory {
         c.gridwidth = 3;
         pane.add(convertButton, c);
 
+        // Add logs text area
+        c.gridx = 0;
+        c.gridy = 4;
+        c.gridwidth = 3;
+        pane.add(logsAreaScroll, c);
+
         frame.pack();
         frame.setResizable(false);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -147,6 +164,8 @@ public class FrameFactory {
         // iconURL is null when not found
         ImageIcon icon = new ImageIcon(iconURL);
         frame.setIconImage(icon.getImage());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
         return frame;
     }
@@ -271,10 +290,9 @@ public class FrameFactory {
                 int returnVal = outputPathFileChooser.showOpenDialog(pane);
 
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File outputPath = outputPathFileChooser.getSelectedFile();
-                    ApplicationLogger.setOutputFile(outputPath.getAbsolutePath());
+                    outputPathTextField.setText(outputPathFileChooser.getSelectedFile().getAbsolutePath());
+                    ApplicationLogger.setOutputFile(outputPathTextField.getText());
 
-                    outputPathTextField.setText(outputPath.getAbsolutePath());
                     if (outputPathCheckbox.isSelected()) {
                         editSettingsToFile(DEFAULT_OUTPUTPATH, outputPathTextField.getText());
                     }
@@ -285,12 +303,15 @@ public class FrameFactory {
             } else if (actionEvent.getSource() == convertButton) {
                 if (inputPathTextArea.getText().isBlank()) {
                     LoggingService.log("Konvertierung kann nicht stattfinden. Eingabedateipfad ist nicht definiert.");
+                    JOptionPane.showMessageDialog(frame, "Bitte Eingabefeld definieren.");
                     return;
                 } else if (outputPathTextField.getText().isBlank()) {
                     LoggingService.log("Konvertierung kann nicht stattfinden. Ausgabepfad ist nicht definiert");
+                    JOptionPane.showMessageDialog(frame, "Bitte Ausgabefeld definieren.");
                     return;
                 }
 
+                ApplicationLogger.setOutputFile(outputPathTextField.getText());
                 String[] inputPathLines = inputPathTextArea.getText().split(Config.ls);
 
                 Map<String, String> pdfData = new HashMap<>();
@@ -301,26 +322,49 @@ public class FrameFactory {
                     ApplicationLogger.noFormattingLog(String.format("\t%s\n", inputPath));
                 });
 
-                for (String inputPath : inputPathLines) {
-                    pdfData.putAll(pdfScanner.scanFile(inputPath));
-                }
+                ExecutorService executorService = Executors.newFixedThreadPool(2);
+                Runnable processPDFsTask = () -> {
+                    CSVErrorStatus.resetCounters();
+                    convertButton.setEnabled(false);
+                    for (String inputPath : inputPathLines) {
+                        pdfData.putAll(pdfScanner.scanFile(inputPath));
+                    }
+                };
+                Future<?> processPDFsTaskFuture = executorService.submit(processPDFsTask);
 
-                try {
-                    File outputFile = new File(outputPathTextField.getText());
-                    outputFile.mkdir();
-                    new CsvWriter().createCsv(pdfData, outputFile);
-                    editSettingsToFile(DEFAULT_INPUTPATH, inputPathTextArea.getText());
-                    editSettingsToFile(DEFAULT_OUTPUTPATH, outputPathTextField.getText());
-                    editSettingsToFile(INPUTPATH_CHECKBOX, inputPathCheckbox.isSelected() ? "true" : "false");
-                    editSettingsToFile(OUTPUTPATH_CHECKBOX, outputPathCheckbox.isSelected() ? "true" : "false");
-                } catch (IOException e) {
-                    // TODO: Display a GUI error message.
-                    LoggingService.log("Fehler beim Erstellen von CSV:");
-                    LoggingService.log(e.getMessage());
-                }
-                finally {
-                    logStatistics();
-                }
+                Runnable writeToCSVTask = () -> {
+                    try {
+                        processPDFsTaskFuture.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        LoggingService.addExceptionToLog(e, true);
+                    }
+
+                    try {
+                        File outputFile = new File(outputPathTextField.getText());
+                        outputFile.mkdir();
+                        new CsvWriter().createCsv(pdfData, outputFile);
+                        editSettingsToFile(DEFAULT_INPUTPATH, inputPathTextArea.getText());
+                        editSettingsToFile(DEFAULT_OUTPUTPATH, outputPathTextField.getText());
+                        editSettingsToFile(INPUTPATH_CHECKBOX, inputPathCheckbox.isSelected() ? "true" : "false");
+                        editSettingsToFile(OUTPUTPATH_CHECKBOX, outputPathCheckbox.isSelected() ? "true" : "false");
+                    } catch (IOException e) {
+                        // TODO: Display a GUI error message.
+                        LoggingService.log("Fehler beim Erstellen von CSV:");
+                        LoggingService.log(e.getMessage());
+                    }
+                    finally {
+                        convertButton.setEnabled(true);
+                        logStatistics();
+                        LoggingService.log("VERARBEITUNG WURDE BEENDET");
+                        ApplicationLogger.noFormattingLog("\n###VERARBEITUNG WURDE BEENDET###\n");
+                        JOptionPane.showMessageDialog(frame,
+                                String.format("Verarbeitung wurde %s beendet.",
+                                        CSVErrorStatus.documentsWithErrors.isEmpty() ? "fehlerfrei" : "mit Fehlern"),
+                                "Result",
+                                CSVErrorStatus.documentsWithErrors.isEmpty() ? JOptionPane.INFORMATION_MESSAGE : JOptionPane.WARNING_MESSAGE);
+                    }
+                };
+                executorService.execute(writeToCSVTask);
             } else if (actionEvent.getSource() == inputPathCheckbox) {
                 if (inputPathCheckbox.isSelected()) {
                     editSettingsToFile(DEFAULT_INPUTPATH, inputPathTextArea.getText());
@@ -341,11 +385,12 @@ public class FrameFactory {
         }
 
         private void logStatistics() {
-            logProcesedFiles("Diese Dateien wurden gefunden:", CSVErrorStatus.selectedDocuments);
-            logProcesedFiles("Diese Dateien wurden ignoriert:", CSVErrorStatus.notReadDocuments);
-            logProcesedFiles("Diese Dateien wurden gelesen:", CSVErrorStatus.readDocuments);
-            logProcesedFiles("Diese Dateien wurden fehlerfrei verarbeitet:", CSVErrorStatus.documentWithoutErrors);
-            logProcesedFiles("Diese Dateien wurden mit Fehler verarbeitet:", CSVErrorStatus.documentWithErrors);
+            logProcesedFiles(String.format("Gufunden (%d):", CSVErrorStatus.selectedDocuments.size()), CSVErrorStatus.selectedDocuments);
+            logProcesedFiles(String.format("Ignoriert (%d):", CSVErrorStatus.notReadDocuments.size()), CSVErrorStatus.notReadDocuments);
+            logProcesedFiles(String.format("Eingelesen (%d):", CSVErrorStatus.readDocuments.size()), CSVErrorStatus.readDocuments);
+            logProcesedFiles(String.format("Fehlerfrei (%d):", CSVErrorStatus.documentsWithoutErrors.size()), CSVErrorStatus.documentsWithoutErrors);
+            logProcesedFiles(String.format("Fehlerhaft (%d):", CSVErrorStatus.documentsWithErrors.size()
+            ), CSVErrorStatus.documentsWithErrors);
             logCounters();
         }
 
@@ -357,16 +402,27 @@ public class FrameFactory {
         }
 
         private void logCounters() {
-            LoggingService.log(String.format(
-                    "\n\tEingegeben\tEingelesen\tNicht eingelesen\tOhne Fehler\tMit Fehlern\n" +
-                            "\t%d\t\t\t%d\t\t\t%d\t\t\t\t\t%d\t\t\t%d",
+
+            ApplicationLogger.log(String.format("Statistiken:"));
+            ApplicationLogger.noFormattingLog(String.format("\tEingegeben:\t\t%s\n" +
+                            "\t===\n" +
+                            "\tNich eingelesen:\t%d\n" +
+                            "\t===\n" +
+                            "\tEingelesen:\t\t%d\n" +
+                            "\t===\n" +
+                            "\tOhne Fehler:\t\t%d\n" +
+                            "\t===\n" +
+                            "\tMit Fehlern:\t\t%d\n",
                     CSVErrorStatus.selectedDocuments.size(),
-                    CSVErrorStatus.readDocuments.size(),
                     CSVErrorStatus.notReadDocuments.size(),
-                    CSVErrorStatus.documentWithoutErrors.size(),
-                    CSVErrorStatus.documentWithErrors.size()
-                    ), true
+                    CSVErrorStatus.readDocuments.size(),
+                    CSVErrorStatus.documentsWithoutErrors.size(),
+                    CSVErrorStatus.documentsWithErrors.size())
             );
         }
+    }
+
+    public static JTextArea getLogsArea() {
+        return logsArea;
     }
 }

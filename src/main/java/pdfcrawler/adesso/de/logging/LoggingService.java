@@ -7,7 +7,7 @@ import static org.apache.log4j.Level.*;
 
 public class LoggingService {
 
-    private static boolean applicationLoggingEnabled = true;
+    private static boolean withApplicationLogging = true;
 
     private LoggingService() {
     }
@@ -44,20 +44,20 @@ public class LoggingService {
         log(INFO, msg, withApplicationLogger);
     }
 
-    public static boolean isApplicationLoggingEnabled() {
-        return applicationLoggingEnabled;
+    public static boolean isWithApplicationLogging() {
+        return withApplicationLogging;
     }
 
-    public static void setApplicationLoggingEnabled(boolean applicationLoggingEnabled) {
+    public static void setWithApplicationLogging(boolean withApplicationLogging) {
         if (ApplicationLogger.getOutputFile() != null) {
-            LoggingService.applicationLoggingEnabled = applicationLoggingEnabled;
+            LoggingService.withApplicationLogging = withApplicationLogging;
         } else {
-            LoggingService.applicationLoggingEnabled = false;
+            LoggingService.withApplicationLogging = false;
         }
     }
 
     public static void logApplicationLogs(String msg) {
-        if (applicationLoggingEnabled && ApplicationLogger.getOutputFile() != null) {
+        if (withApplicationLogging && ApplicationLogger.getOutputFile() != null) {
             ApplicationLogger.log(msg);
         }
     }
@@ -66,7 +66,7 @@ public class LoggingService {
         logger.log(level, msg);
 
         if (withApplicationLogger &&
-                applicationLoggingEnabled &&
+                withApplicationLogging &&
                 ApplicationLogger.getOutputFile() != null) {
             ApplicationLogger.log(msg);
         }
