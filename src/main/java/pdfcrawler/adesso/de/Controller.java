@@ -1,5 +1,9 @@
 package pdfcrawler.adesso.de;
 
+import pdfcrawler.adesso.de.gui.FrameFactory;
+
+import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -9,37 +13,27 @@ public class Controller {
     private static final ConfigService configService = new ConfigService();
     private static final Scanner sn = new Scanner(System.in);
 
-    public static void main(String[] args) throws IOException {
-
-        var pdfData = new HashMap<String, String>();
-        final var pdfScanner = new PdfScanner();
-        showSplash();
-
-        var option = showMenu();
-
-        while (!option.equals("3")) {
-            LoggingService.startLogging();
-
-            switch (option) {
-                case "1":
-                    pdfData = pdfScanner.scanFile(configService.getInputPath());
-                    new CsvWriter().createCsv(pdfData);
-                    break;
-                case "2":
-                    var customPath = getPathFromUserInput();
-                    pdfData = pdfScanner.scanFile(customPath);
-                    new CsvWriter().createCsv(pdfData);
-                    break;
-                default:
-                    //inform user in case of invalid choice.
-                    System.out.println("Ungueltige Eingabe.");
-            }
-            pdfData.clear();
-            option = showMenu();
+    public static void main(String[] args) {
+        try {
+            // Set cross-platform Java L&F (also called "Metal")
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        }
+        catch (ClassNotFoundException e) {
+            // handle exception
+        }
+        catch (InstantiationException e) {
+            // handle exception
+        }
+        catch (IllegalAccessException e) {
+            // handle exception
         }
 
-        System.out.println("Bis bald.");
-        System.exit(0);
+        JFrame jFrame = FrameFactory.initializeFrame();
+        jFrame.setVisible(true);
 
     }
 
